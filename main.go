@@ -30,6 +30,7 @@ func main() {
 	// Define the routes
 	router.GET("/testsearch/:query", handlers.GetTestSearchHandler)
 	router.GET("/booksbytitle/:title", handlers.GetBooksByTitleHandler)
+	router.GET("booksbygenre/:genre", handlers.GetBooksByGenreHandler)
 
 	// Run the server
 	err := router.Run(":8080")

@@ -15,10 +15,11 @@ import (
 func constructAPIURL(query string, searchType string, startIndex int) string {
 	var googleBooksAPIURL string
 
-	if searchType == "id" {
+	if searchType == string(models.SearchId) {
 		googleBooksAPIURL = fmt.Sprintf("https://www.googleapis.com/books/v1/volumes/%s", query)
-	} else if searchType == "searchquery" {
-		googleBooksAPIURL = fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&orderBy=newest&maxResults=40&startIndex=%d", query, startIndex)
+	} else if searchType == string(models.SearchBooks) {
+		encodedQuery := url.QueryEscape(query)
+		googleBooksAPIURL = fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&orderBy=newest&maxResults=40&startIndex=%d", encodedQuery, startIndex)
 	} else {
 		encodedQuery := url.QueryEscape(query + " books")
 		googleBooksAPIURL = fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&orderBy=newest&maxResults=40&startIndex=%d", encodedQuery, startIndex)

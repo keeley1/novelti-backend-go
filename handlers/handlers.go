@@ -3,14 +3,13 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/keeley1/novelti-backend-go/models"
-	"github.com/keeley1/novelti-backend-go/services"
-	"github.com/keeley1/novelti-backend-go/utils"
 )
+
+// check queries with spaces
 
 func GetTestSearchHandler(context *gin.Context) {
 	searchQuery := context.Param("query")
@@ -43,44 +42,12 @@ func GetTestSearchHandler(context *gin.Context) {
 
 func GetBooksByTitleHandler(context *gin.Context) {
 	searchQuery := context.Param("title")
-	startIndexStr := context.DefaultQuery("startIndex", "0")
-	startIndex := utils.ParseToPositiveInt(startIndexStr)
+	searchType := models.SearchByTitle
+	HandleBookSearch(context, searchQuery, string(searchType))
+}
 
-	// Ignore caching for now
-
-	// Make api call
-	resp, err := services.MakeAPICall(searchQuery, "intitle", startIndex)
-	if err != nil {
-		log.Printf("Google books api error: %v", err)
-		context.JSON(
-			http.StatusBadGateway,
-			gin.H{"error": "Call to google books api failed"},
-		)
-	}
-	defer resp.Body.Close()
-
-	// Decode the api response
-	var apiResp *models.GoogleBooksAPIResponse
-	apiResp, err = services.DecodeBookData(resp)
-	if err != nil {
-		log.Printf("Unmarshal error: %v", err)
-		context.JSON(
-			http.StatusInternalServerError,
-			gin.H{"error": "Error decoding api response"},
-		)
-	}
-
-	// Convert to books
-	var books []models.Book
-	books, err = services.CreateBooks(apiResp)
-	if err != nil {
-		log.Printf("Error converting to book objects: %v", err)
-		context.JSON(
-			http.StatusInternalServerError,
-			gin.H{"error": "Error creating books list"},
-		)
-	}
-
-	// Caching would go here
-	context.JSON(http.StatusOK, books)
+func GetBooksByGenreHandler(context *gin.Context) {
+	searchQuery := context.Param("genre")
+	searchType := models.SearchByGenre
+	HandleBookSearch(context, searchQuery, string(searchType))
 }
