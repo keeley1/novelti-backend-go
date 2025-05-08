@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	// "net/http"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/keeley1/novelti-backend-go/handlers"
@@ -19,7 +17,6 @@ and have a good file structure.
 func main() {
 	fmt.Println("hello world")
 
-	// Should this move to server file
 	// Create a default server
 	router := gin.Default()
 
@@ -30,7 +27,9 @@ func main() {
 	// Define the routes
 	router.GET("/testsearch/:query", handlers.GetTestSearchHandler)
 	router.GET("/booksbytitle/:title", handlers.GetBooksByTitleHandler)
-	router.GET("booksbygenre/:genre", handlers.GetBooksByGenreHandler)
+	router.GET("/booksbygenre/:genre", handlers.GetBooksByGenreHandler)
+	router.GET("/searchbooks/:searchquery", handlers.GetBooksBySearchHandler)
+	router.GET("/searchbooksbyid/:id", handlers.GetBookByIDHandler)
 
 	// Run the server
 	err := router.Run(":8080")
