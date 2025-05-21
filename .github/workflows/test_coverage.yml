@@ -34,6 +34,17 @@ jobs:
       
     - name: Fail if coverage is below threshold
       run: |
+        echo "DEBUG: total_coverage='$total_coverage'"
+        if [ -z "$total_coverage" ]; then
+          echo "Coverage value is empty, failing the job."
+          exit 1
+        fi
+
+        if ! echo "$total_coverage" | grep -qE '^[0-9]+(\.[0-9]+)?$'; then
+          echo "Coverage value is not a valid number: $total_coverage"
+          exit 1
+        fi
+
         if (( $(echo "$total_coverage < 50" | bc -l) )); then
           echo "Coverage ($total_coverage%) is below the threshold (50%)"
           exit 1
