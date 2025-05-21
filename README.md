@@ -1,0 +1,1 @@
+[![golangci-lint](https://github.com/keeley1/novelti-backend-go/actions/workflows/golangci-lint.yml/badge.svg?branch=main&event=push)](https://github.com/keeley1/novelti-backend-go/actions/workflows/golangci-lint.yml)
