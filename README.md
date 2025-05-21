@@ -1,1 +1,2 @@
-[![golangci-lint](https://github.com/keeley1/novelti-backend-go/actions/workflows/golangci-lint.yml/badge.svg?branch=main&event=push)](https://github.com/keeley1/novelti-backend-go/actions/workflows/golangci-lint.yml)
+# novelti-backend-go
+[![golangci-lint](https://github.com/keeley1/novelti-backend-go/actions/workflows/golangci-lint.yml/badge.svg?branch=main&event=push)](https://github.com/keeley1/novelti-backend-go/actions/workflows/golangci-lint.yml) [![test coverage](https://github.com/keeley1/novelti-backend-go/actions/workflows/test_coverage.yml/badge.svg?branch=main&event=push)](https://github.com/keeley1/novelti-backend-go/actions/workflows/test_coverage.yml)
