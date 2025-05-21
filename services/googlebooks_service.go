@@ -12,12 +12,12 @@ import (
 	"github.com/keeley1/novelti-backend-go/models"
 )
 
-// Function type for constructing URL.
+// URLBuilder is a function type for constructing URL.
 // Can be used here and for testing.
-type UrlBuilder func(query string, searchType string, startIndex int) string
+type URLBuilder func(query string, searchType string, startIndex int) string
 
 func ConstructAPIURL(query string, searchType string, startIndex int) string {
-	var apiUrl string
+	var apiURL string
 	encodedQuery := ""
 
 	if searchType == string(models.SearchBooks) {
@@ -27,12 +27,12 @@ func ConstructAPIURL(query string, searchType string, startIndex int) string {
 		fmt.Println("encoded query: ", encodedQuery)
 	}
 
-	apiUrl = fmt.Sprintf("%s?q=%s&orderBy=%s&maxResults=%d&startIndex=%d", config.GoogleBooksBaseUrl, encodedQuery, config.DefaultOrderBy, config.DefaultMaxResults, startIndex)
-	return apiUrl
+	apiURL = fmt.Sprintf("%s?q=%s&orderBy=%s&maxResults=%d&startIndex=%d", config.GoogleBooksBaseURL, encodedQuery, config.DefaultOrderBy, config.DefaultMaxResults, startIndex)
+	return apiURL
 }
 
-func MakeAPICall(buildUrl UrlBuilder, client *http.Client, query string, searchType string, startIndex int) (*http.Response, error) {
-	var googleBooksAPIURL = buildUrl(query, searchType, startIndex)
+func MakeAPICall(buildURL URLBuilder, client *http.Client, query string, searchType string, startIndex int) (*http.Response, error) {
+	var googleBooksAPIURL = buildURL(query, searchType, startIndex)
 
 	fmt.Println("Calling google books api.....")
 	resp, err := client.Get(googleBooksAPIURL)

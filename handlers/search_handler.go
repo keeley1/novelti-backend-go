@@ -22,7 +22,10 @@ func HandleBookSearch(context *gin.Context, searchQuery string, searchType strin
 			gin.H{"error": "Call to google books api failed"},
 		)
 	}
-	defer resp.Body.Close()
+	err = utils.CloseBody(resp.Body)
+	if err != nil {
+		log.Printf("warning: failed to close response body: %v\n", err)
+	}
 
 	// Decode the API response
 	var apiResp *models.GoogleBooksAPIResponse

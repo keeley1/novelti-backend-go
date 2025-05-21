@@ -5,6 +5,8 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/keeley1/novelti-backend-go/utils"
 )
 
 func TestConstructAPIURL(t *testing.T) {
@@ -45,7 +47,7 @@ func TestMakeAPICall(t *testing.T) {
 	// Set up a mock/test server
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"items": []}`))
+		_, _ = w.Write([]byte(`{"items": []}`))
 	}))
 	defer ts.Close()
 
@@ -59,7 +61,10 @@ func TestMakeAPICall(t *testing.T) {
 	if err != nil {
 		t.Errorf("make api call failed: %v", err)
 	}
-	defer resp.Body.Close()
+	err = utils.CloseBody(resp.Body)
+	if err != nil {
+		t.Errorf("warning: failed to close response body: %v\n", err)
+	}
 
 	// Check response status code
 	if resp.StatusCode != http.StatusOK {

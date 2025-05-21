@@ -3,14 +3,16 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/keeley1/novelti-backend-go/models"
+	"github.com/keeley1/novelti-backend-go/utils"
 )
 
-// check queries with spaces
-
+// GetTestSearchHandler function tests calling the google books api.
+// It will eventually be deleted.
 func GetTestSearchHandler(context *gin.Context) {
 	searchQuery := context.Param("query")
 	googleBooksAPIURL := fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&maxResults=20", searchQuery)
@@ -24,7 +26,10 @@ func GetTestSearchHandler(context *gin.Context) {
 		)
 		return
 	}
-	defer resp.Body.Close()
+	err = utils.CloseBody(resp.Body)
+	if err != nil {
+		log.Printf("warning: failed to close response body: %v\n", err)
+	}
 
 	var data map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
