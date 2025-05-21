@@ -34,7 +34,9 @@ jobs:
       
     - name: Fail if coverage is below threshold
       run: |
-        echo "DEBUG: total_coverage='$total_coverage'"
+        echo "DEBUG: total_coverage='${{ steps.coverage.outputs.total_coverage }}'"
+        total_coverage="${{ steps.coverage.outputs.total_coverage }}"
+
         if [ -z "$total_coverage" ]; then
           echo "Coverage value is empty, failing the job."
           exit 1
