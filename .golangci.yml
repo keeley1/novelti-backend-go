@@ -1,5 +1,3 @@
-version: "2"
-
 linters:
   enable:
     - govet
@@ -11,6 +9,6 @@ linters:
 run:
   timeout: 2m
 
-# linters-settings:
-#   errcheck:
-#     check-type-assertions: true
+linters-settings:
+  errcheck:
+    check-type-assertions: true
