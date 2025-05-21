@@ -57,9 +57,3 @@ func GetBooksBySearchHandler(context *gin.Context) {
 	searchType := models.SearchBooks
 	HandleBookSearch(context, searchQuery, string(searchType))
 }
-
-func GetBookByIDHandler(context *gin.Context) {
-	// Need to adjust logic to handle getting single book
-	// Ideally should get book details from cache (once cache is implemented properly)
-	// Can access database to get additional details?
-}

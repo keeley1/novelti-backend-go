@@ -14,7 +14,7 @@ func HandleBookSearch(context *gin.Context, searchQuery string, searchType strin
 	startIndexStr := context.DefaultQuery("startIndex", "0")
 	startIndex := utils.ParseToPositiveInt(startIndexStr)
 
-	resp, err := services.MakeAPICall(searchQuery, searchType, startIndex)
+	resp, err := services.MakeAPICall(services.ConstructAPIURL, http.DefaultClient, searchQuery, searchType, startIndex)
 	if err != nil {
 		log.Printf("Google books api error: %v", err)
 		context.JSON(

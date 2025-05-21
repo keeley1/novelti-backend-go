@@ -29,7 +29,6 @@ func main() {
 	router.GET("/booksbytitle/:title", handlers.GetBooksByTitleHandler)
 	router.GET("/booksbygenre/:genre", handlers.GetBooksByGenreHandler)
 	router.GET("/searchbooks/:searchquery", handlers.GetBooksBySearchHandler)
-	router.GET("/searchbooksbyid/:id", handlers.GetBookByIDHandler)
 
 	// Run the server
 	err := router.Run(":8080")

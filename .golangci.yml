@@ -1,0 +1,16 @@
+version: 2
+
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - misspell
+    - revive
+
+run:
+  timeout: 2m
+
+# Report ignored errors from type assertions
+errcheck:
+  check-type-assertions: true

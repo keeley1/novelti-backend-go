@@ -8,32 +8,34 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/keeley1/novelti-backend-go/config"
 	"github.com/keeley1/novelti-backend-go/models"
 )
 
-// Could make more generic and move to utils??
-func constructAPIURL(query string, searchType string, startIndex int) string {
-	var googleBooksAPIURL string
+// Function type for constructing URL.
+// Can be used here and for testing.
+type UrlBuilder func(query string, searchType string, startIndex int) string
 
-	if searchType == string(models.SearchId) {
-		googleBooksAPIURL = fmt.Sprintf("https://www.googleapis.com/books/v1/volumes/%s", query)
-	} else if searchType == string(models.SearchBooks) {
-		encodedQuery := url.QueryEscape(query)
-		googleBooksAPIURL = fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&orderBy=newest&maxResults=40&startIndex=%d", encodedQuery, startIndex)
+func ConstructAPIURL(query string, searchType string, startIndex int) string {
+	var apiUrl string
+	encodedQuery := ""
+
+	if searchType == string(models.SearchBooks) {
+		encodedQuery = url.QueryEscape(query)
 	} else {
-		encodedQuery := url.QueryEscape(query + " books")
-		googleBooksAPIURL = fmt.Sprintf("https://www.googleapis.com/books/v1/volumes?q=%s&orderBy=newest&maxResults=40&startIndex=%d", encodedQuery, startIndex)
+		encodedQuery = url.QueryEscape(query + " books")
+		fmt.Println("encoded query: ", encodedQuery)
 	}
 
-	fmt.Println("API URL:", googleBooksAPIURL)
-	return googleBooksAPIURL
+	apiUrl = fmt.Sprintf("%s?q=%s&orderBy=%s&maxResults=%d&startIndex=%d", config.GoogleBooksBaseUrl, encodedQuery, config.DefaultOrderBy, config.DefaultMaxResults, startIndex)
+	return apiUrl
 }
 
-func MakeAPICall(query string, searchType string, startIndex int) (*http.Response, error) {
-	var googleBooksAPIURL = constructAPIURL(query, searchType, startIndex)
+func MakeAPICall(buildUrl UrlBuilder, client *http.Client, query string, searchType string, startIndex int) (*http.Response, error) {
+	var googleBooksAPIURL = buildUrl(query, searchType, startIndex)
 
 	fmt.Println("Calling google books api.....")
-	resp, err := http.Get(googleBooksAPIURL)
+	resp, err := client.Get(googleBooksAPIURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch data: %v", err)
 	}
