@@ -16,6 +16,8 @@ import (
 // Can be used here and for testing.
 type URLBuilder func(query string, searchType string, startIndex int) string
 
+// ConstructAPIURL takes a query, search type, and a start index and constructs
+// an API url.
 func ConstructAPIURL(query string, searchType string, startIndex int) string {
 	var apiURL string
 	encodedQuery := ""
@@ -27,11 +29,24 @@ func ConstructAPIURL(query string, searchType string, startIndex int) string {
 		fmt.Println("encoded query: ", encodedQuery)
 	}
 
-	apiURL = fmt.Sprintf("%s?q=%s&orderBy=%s&maxResults=%d&startIndex=%d", config.GoogleBooksBaseURL, encodedQuery, config.DefaultOrderBy, config.DefaultMaxResults, startIndex)
+	apiURL = fmt.Sprintf("%s?q=%s&orderBy=%s&maxResults=%d&startIndex=%d",
+		config.GoogleBooksBaseURL,
+		encodedQuery,
+		config.DefaultOrderBy,
+		config.DefaultMaxResults,
+		startIndex)
+
 	return apiURL
 }
 
-func MakeAPICall(buildURL URLBuilder, client *http.Client, query string, searchType string, startIndex int) (*http.Response, error) {
+// MakeAPICall takes a URLBuilder, http client, query, search type, and start
+// index and makes a call to the google books API.
+func MakeAPICall(buildURL URLBuilder,
+	client *http.Client,
+	query string,
+	searchType string,
+	startIndex int) (*http.Response, error) {
+
 	var googleBooksAPIURL = buildURL(query, searchType, startIndex)
 
 	fmt.Println("Calling google books api.....")
@@ -39,9 +54,12 @@ func MakeAPICall(buildURL URLBuilder, client *http.Client, query string, searchT
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch data: %v", err)
 	}
+
 	return resp, err
 }
 
+// DecodeBookData takes in a http response and deserializes it
+// into a response object.
 func DecodeBookData(responseData *http.Response) (*models.GoogleBooksAPIResponse, error) {
 	// Read response body into byte slice
 	body, err := io.ReadAll(responseData.Body)
@@ -54,14 +72,10 @@ func DecodeBookData(responseData *http.Response) (*models.GoogleBooksAPIResponse
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	for _, item := range apiResp.Items {
-		fmt.Println("Title:", item.VolumeInfo.Title)
-		fmt.Println("Authors:", item.VolumeInfo.Authors)
-		fmt.Println("Thumbnail:", item.VolumeInfo.ImageLinks.Thumbnail)
-	}
 	return &apiResp, nil
 }
 
+// CreateBooks takes the API response object and creates book objects.
 func CreateBooks(decodedBooks *models.GoogleBooksAPIResponse) ([]models.Book, error) {
 	var books []models.Book
 	for _, item := range decodedBooks.Items {
