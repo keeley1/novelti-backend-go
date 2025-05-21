@@ -11,7 +11,5 @@ linters:
 run:
   timeout: 2m
 
-# Report ignored errors from type assertions
-linters-settings:
-  errcheck:
-    check-type-assertions: true
+errcheck:
+  check-type-assertions: true
