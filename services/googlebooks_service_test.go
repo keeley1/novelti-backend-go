@@ -1,7 +1,7 @@
 package services
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -94,7 +94,7 @@ func TestDecodeBookData_Success(t *testing.T) {
 
 	// Create a fake http.Response with the JSON in the Body
 	resp := &http.Response{
-		Body: ioutil.NopCloser(strings.NewReader(jsonData)),
+		Body: io.NopCloser(strings.NewReader(jsonData)),
 	}
 
 	result, err := DecodeBookData(resp)
@@ -112,7 +112,7 @@ func TestDecodeBookData_WithInvalidJSON(t *testing.T) {
 
 	// Create a fake http.Response with the JSON in the Body
 	resp := &http.Response{
-		Body: ioutil.NopCloser(strings.NewReader(invalidJSON)),
+		Body: io.NopCloser(strings.NewReader(invalidJSON)),
 	}
 
 	_, err := DecodeBookData(resp)
