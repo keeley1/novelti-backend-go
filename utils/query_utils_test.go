@@ -2,7 +2,6 @@ package utils
 
 import "testing"
 
-// could also look into table driven tests
 func TestParseToPositiveInt(t *testing.T) {
 	parsedResult := ParseToPositiveInt("10")
 

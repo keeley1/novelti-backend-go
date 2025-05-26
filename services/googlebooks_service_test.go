@@ -1,6 +1,7 @@
 package services
 
 import (
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -69,5 +70,53 @@ func TestMakeAPICall(t *testing.T) {
 	// Check response status code
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("expected 200 status code but got %d", resp.StatusCode)
+	}
+}
+
+func TestDecodeBookData_Success(t *testing.T) {
+	// JSON matching GoogleBooksAPIResponse structure
+	jsonData := `{
+		"items": [
+			{
+				"id": "123",
+				"volumeInfo": {
+					"title": "Sample Book",
+					"authors": ["Author One"],
+					"publishedDate": "2020-01-01",
+					"description": "A sample book description.",
+					"imageLinks": {
+						"thumbnail": "http://example.com/thumb.jpg"
+					}
+				}
+			}
+		]
+	}`
+
+	// Create a fake http.Response with the JSON in the Body
+	resp := &http.Response{
+		Body: ioutil.NopCloser(strings.NewReader(jsonData)),
+	}
+
+	result, err := DecodeBookData(resp)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if len(result.Items) != 1 {
+		t.Errorf("expected 1 item, got %d", len(result.Items))
+	}
+}
+
+func TestDecodeBookData_WithInvalidJSON(t *testing.T) {
+	invalidJSON := `{"kind": "books#volumes", "totalItems": 1, "items": [INVALID]}`
+
+	// Create a fake http.Response with the JSON in the Body
+	resp := &http.Response{
+		Body: ioutil.NopCloser(strings.NewReader(invalidJSON)),
+	}
+
+	_, err := DecodeBookData(resp)
+	if err == nil {
+		t.Fatalf("expected an error, got nil")
 	}
 }
