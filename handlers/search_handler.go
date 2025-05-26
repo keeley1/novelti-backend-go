@@ -10,6 +10,8 @@ import (
 	"github.com/keeley1/novelti-backend-go/utils"
 )
 
+// HandleBookSearch function performs book searches by different search types.
+// It returns a JSON response with deserialized book objects.
 func HandleBookSearch(context *gin.Context, searchQuery string, searchType string) {
 	startIndexStr := context.DefaultQuery("startIndex", "0")
 	startIndex := utils.ParseToPositiveInt(startIndexStr)

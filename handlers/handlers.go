@@ -1,3 +1,5 @@
+// Package handlers defines HTTP endpoints and request handlers for book search
+// functionality, including API integration and response formatting.
 package handlers
 
 import (
@@ -45,18 +47,21 @@ func GetTestSearchHandler(context *gin.Context) {
 	context.JSON(http.StatusOK, data)
 }
 
+// GetBooksByTitleHandler function returns book information by title
 func GetBooksByTitleHandler(context *gin.Context) {
 	searchQuery := context.Param("title")
 	searchType := models.SearchByTitle
 	HandleBookSearch(context, searchQuery, string(searchType))
 }
 
+// GetBooksByGenreHandler function returns book information by genre
 func GetBooksByGenreHandler(context *gin.Context) {
 	searchQuery := context.Param("genre")
 	searchType := models.SearchByGenre
 	HandleBookSearch(context, searchQuery, string(searchType))
 }
 
+// GetBooksBySearchHandler function returns book information by any search
 func GetBooksBySearchHandler(context *gin.Context) {
 	searchQuery := context.Param("searchquery")
 	searchType := models.SearchBooks

@@ -1,3 +1,5 @@
+// Package utils provides general utility functions and helpers
+// used throughout the application to support common operations.
 package utils
 
 import (

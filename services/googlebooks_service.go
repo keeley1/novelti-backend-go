@@ -1,3 +1,6 @@
+// Package services provides functions for interacting with external APIs,
+// including the Google Books API, and for transforming API responses into
+// internal application data structures.
 package services
 
 import (

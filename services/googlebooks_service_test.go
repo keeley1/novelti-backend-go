@@ -45,14 +45,14 @@ func TestConstructAPIURL(t *testing.T) {
 
 func TestMakeAPICall(t *testing.T) {
 	// Set up a mock/test server
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte(`{"items": []}`))
 	}))
 	defer ts.Close()
 
 	// Set up a mock url builder function
-	mockURLBuilder := func(query string, searchType string, startIndex int) string {
+	mockURLBuilder := func(_ string, _ string, _ int) string {
 		return ts.URL
 	}
 

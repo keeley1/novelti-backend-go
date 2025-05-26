@@ -1,3 +1,4 @@
+// Package main is the entry point for the book application.
 package main
 
 import (
@@ -8,11 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/keeley1/novelti-backend-go/handlers"
 )
-
-/*
-This project should follow best practices for a go server, use tests, good error handling
-and have a good file structure.
-*/
 
 func main() {
 	fmt.Println("hello world")
